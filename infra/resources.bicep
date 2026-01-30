@@ -33,6 +33,9 @@ param grafanaPassword string
 param githubPat string
 param githubOrganizationSlugs string
 
+@description('Enable demo mode to generate mock data instead of fetching from GitHub')
+param enableDemoMode bool = false
+
 param elasticSearchImageName string
 param grafanaImageName string
 
@@ -200,6 +203,10 @@ var additionalCpuadUpdaterDefinition = {
       {
         name: 'ORGANIZATION_SLUGS'
         value: githubOrganizationSlugs
+      }
+      {
+        name: 'ENABLE_DEMO_MODE'
+        value: enableDemoMode ? 'true' : 'false'
       }
     ],
     cpuAdUpdaterDefinition.settings

@@ -46,6 +46,9 @@ param githubPat string
 @description('The Slugs of all Organizations that you want to monitor, which can be one or multiple separated by `,` (English symbol). **If you are using Copilot Standalone, use your Standalone Slug here, prefixed with `standalone:`, for example `standalone:YOUR_STANDALONE_SLUG`**. Please replace `<YOUR_ORGANIZATION_SLUGS>` with the actual value. For example, the following types of values are supported: `myOrg1`, `myOrg1,myOrg2`, `standalone:myStandaloneSlug`, `myOrg1,standalone:myStandaloneSlug`')
 param githubOrganizationSlugs string
 
+@description('Enable demo mode to generate mock data instead of fetching from GitHub. When true, no GitHub PAT is required.')
+param enableDemoMode bool = false
+
 param elasticSearchImageName string = ''
 param grafanaImageName string = ''
 
@@ -90,6 +93,7 @@ module resources 'resources.bicep' = {
     grafanaUsername: grafanaUsername
     githubPat: githubPat
     githubOrganizationSlugs: githubOrganizationSlugs
+    enableDemoMode: enableDemoMode
     doRoleAssignments: doRoleAssignments
     authentication: authentication
   }

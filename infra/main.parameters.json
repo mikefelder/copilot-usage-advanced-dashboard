@@ -32,6 +32,9 @@
     "githubOrganizationSlugs": {
       "value": "${GITHUB_ORGANIZATION_SLUGS}"
     },
+    "enableDemoMode": {
+      "value": "${ENABLE_DEMO_MODE=false}"
+    },
     "grafanaUsername": {
       "value": "${GRAFANA_USERNAME}"
     },
