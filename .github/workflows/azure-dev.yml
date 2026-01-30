@@ -52,12 +52,16 @@ jobs:
           tenant-id: ${{ env.AZURE_TENANT_ID }}
           subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
 
+      - name: Create Resource Group
+        run: |
+          az group create --name ${{ vars.AZURE_RESOURCE_GROUP }} --location ${{ vars.AZURE_LOCATION }} || true
+
       - name: Initialize azd environment
         run: |
           azd init --no-prompt --environment ${{ vars.AZURE_ENV_NAME }}
           azd env set AZURE_SUBSCRIPTION_ID ${{ vars.AZURE_SUBSCRIPTION_ID }}
           azd env set AZURE_LOCATION ${{ vars.AZURE_LOCATION }}
-          azd env set AZURE_RESOURCE_GROUP ${{ vars.AZURE_RESOURCE_GROUP }}
+          azd env set AZURE_RESOURCE_GROUP_NAME ${{ vars.AZURE_RESOURCE_GROUP }}
           azd env set GITHUB_ORGANIZATION_SLUGS ${{ vars.GH_ORGANIZATION_SLUGS }}
           azd env set ENABLE_DEMO_MODE ${{ vars.ENABLE_DEMO_MODE }}
 
