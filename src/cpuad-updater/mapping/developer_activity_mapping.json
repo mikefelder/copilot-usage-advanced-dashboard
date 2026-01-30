@@ -1,0 +1,100 @@
+{
+  "mappings": {
+    "properties": {
+      "report_start_day": {
+        "type": "date"
+      },
+      "report_end_day": {
+        "type": "date"
+      },
+      "day": {
+        "type": "date"
+      },
+      "user_login": {
+        "type": "keyword"
+      },
+      "organization_slug": {
+        "type": "keyword"
+      },
+      "slug_type": {
+        "type": "keyword"
+      },
+      "team": {
+        "type": "keyword"
+      },
+      "primary_language": {
+        "type": "keyword"
+      },
+      "seniority": {
+        "type": "keyword"
+      },
+      "period_days": {
+        "type": "integer"
+      },
+      "last_updated_at": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      },
+      "unique_hash": {
+        "type": "keyword"
+      },
+      "utc_offset": {
+        "type": "keyword"
+      },
+      "commit_count": {
+        "type": "long"
+      },
+      "repos_contributed": {
+        "type": "integer"
+      },
+      "prs_opened": {
+        "type": "long"
+      },
+      "prs_merged": {
+        "type": "long"
+      },
+      "prs_reviewed": {
+        "type": "long"
+      },
+      "pr_comments": {
+        "type": "long"
+      },
+      "prs_closed": {
+        "type": "long"
+      },
+      "issues_opened": {
+        "type": "long"
+      },
+      "issues_closed": {
+        "type": "long"
+      },
+      "issue_comments": {
+        "type": "long"
+      },
+      "total_contributions": {
+        "type": "long"
+      },
+      "code_review_activity": {
+        "type": "long"
+      },
+      "commits_per_day": {
+        "type": "float"
+      },
+      "prs_per_day": {
+        "type": "float"
+      },
+      "reviews_per_day": {
+        "type": "float"
+      }
+    }
+  },
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0
+  }
+}

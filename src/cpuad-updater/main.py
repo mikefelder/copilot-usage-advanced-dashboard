@@ -12,6 +12,7 @@ import traceback
 from zoneinfo import ZoneInfo
 from create_user_summary import create_user_summaries
 from create_user_top_by_day import create_user_top_by_day
+from fetch_developer_activity import DeveloperActivityFetcher
 
 
 def get_utc_offset():
@@ -121,6 +122,7 @@ class Indexes:
     )
     index_user_metrics = os.getenv("INDEX_USER_METRICS", "copilot_user_metrics")
     index_user_adoption = os.getenv("INDEX_USER_ADOPTION", "copilot_user_adoption")
+    index_developer_activity = os.getenv("INDEX_DEVELOPER_ACTIVITY", "developer_activity")
 
 
 logger = configure_logger(log_path=Paras.log_path)
@@ -1472,6 +1474,35 @@ def main(organization_slug):
     except Exception as e:
         logger.error(f"Failed to create user top-by-day documents: {e}")
         logger.error(f"Full traceback: {traceback.format_exc()}")
+
+    # Process developer activity metrics (for comparison with Copilot metrics)
+    enable_developer_activity = os.getenv("ENABLE_DEVELOPER_ACTIVITY", "true").lower() == "true"
+    if enable_developer_activity:
+        logger.info(
+            f"Processing developer activity metrics for {slug_type}: {organization_slug}"
+        )
+        try:
+            dev_activity_fetcher = DeveloperActivityFetcher(
+                Paras.github_pat, organization_slug, is_standalone
+            )
+            developer_activity_data = dev_activity_fetcher.fetch_developer_activity_for_members(
+                days_back=int(os.getenv("DEVELOPER_ACTIVITY_DAYS_BACK", "28"))
+            )
+            
+            if not developer_activity_data:
+                logger.warning(
+                    f"No developer activity data found for {slug_type}: {organization_slug}"
+                )
+            else:
+                logger.info(f"Writing {len(developer_activity_data)} developer activity records to Elasticsearch...")
+                for activity_record in developer_activity_data:
+                    es_manager.write_to_es(Indexes.index_developer_activity, activity_record)
+                logger.info(f"Successfully processed {len(developer_activity_data)} developer activity records")
+        except Exception as e:
+            logger.error(f"Failed to process developer activity for {slug_type} {organization_slug}: {e}")
+            logger.error(f"Full traceback: {traceback.format_exc()}")
+    else:
+        logger.info("Developer activity metrics collection is disabled (set ENABLE_DEVELOPER_ACTIVITY=true to enable)")
 
     # Process usage data
     copilot_usage_datas = github_org_manager.get_copilot_usages(team_slug="all")

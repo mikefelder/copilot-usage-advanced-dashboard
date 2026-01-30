@@ -1,0 +1,1965 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_ELASTICSEARCH-DEVELOPER-ACTIVITY",
+      "label": "elasticsearch-developer-activity",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "elasticsearch",
+      "pluginName": "Elasticsearch"
+    },
+    {
+      "name": "DS_ELASTICSEARCH-USER-METRICS",
+      "label": "elasticsearch-user-metrics",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "elasticsearch",
+      "pluginName": "Elasticsearch"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "datasource",
+      "id": "elasticsearch",
+      "name": "Elasticsearch",
+      "version": "1.0.0"
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "11.0.0"
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Copilot Adoption",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Developer Activity Metrics - Commits, PRs, Code Reviews compared with Copilot Usage. Analyze productivity improvements post-Copilot adoption.",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 100,
+      "panels": [],
+      "title": "📊 Executive Summary - Copilot Impact",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "elasticsearch-developer-activity"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 1
+      },
+      "id": 201,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": ["sum"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "alias": "Total Commits",
+          "bucketAggs": [
+            {
+              "field": "day",
+              "id": "2",
+              "settings": {
+                "interval": "auto",
+                "min_doc_count": "0",
+                "timeZone": "utc"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "elasticsearch-developer-activity"
+          },
+          "metrics": [
+            {
+              "field": "commit_count",
+              "id": "1",
+              "type": "sum"
+            }
+          ],
+          "query": "organization_slug: $organization_name",
+          "refId": "A",
+          "timeField": "day"
+        }
+      ],
+      "title": "Total Commits",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "elasticsearch-developer-activity"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 1
+      },
+      "id": 202,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": ["sum"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "alias": "Total PRs",
+          "bucketAggs": [
+            {
+              "field": "day",
+              "id": "2",
+              "settings": {
+                "interval": "auto",
+                "min_doc_count": "0",
+                "timeZone": "utc"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "elasticsearch-developer-activity"
+          },
+          "metrics": [
+            {
+              "field": "prs_opened",
+              "id": "1",
+              "type": "sum"
+            }
+          ],
+          "query": "organization_slug: $organization_name",
+          "refId": "A",
+          "timeField": "day"
+        }
+      ],
+      "title": "Total PRs Opened",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "elasticsearch-developer-activity"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 1
+      },
+      "id": 203,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": ["sum"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "alias": "Code Reviews",
+          "bucketAggs": [
+            {
+              "field": "day",
+              "id": "2",
+              "settings": {
+                "interval": "auto",
+                "min_doc_count": "0",
+                "timeZone": "utc"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "elasticsearch-developer-activity"
+          },
+          "metrics": [
+            {
+              "field": "prs_reviewed",
+              "id": "1",
+              "type": "sum"
+            }
+          ],
+          "query": "organization_slug: $organization_name",
+          "refId": "A",
+          "timeField": "day"
+        }
+      ],
+      "title": "Code Reviews",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "elasticsearch-user-metrics"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 1
+      },
+      "id": 204,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": ["sum"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "alias": "Copilot Interactions",
+          "bucketAggs": [
+            {
+              "field": "day",
+              "id": "2",
+              "settings": {
+                "interval": "auto",
+                "min_doc_count": "0",
+                "timeZone": "utc"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "elasticsearch-user-metrics"
+          },
+          "metrics": [
+            {
+              "field": "user_initiated_interaction_count",
+              "id": "1",
+              "type": "sum"
+            }
+          ],
+          "query": "organization_slug: $organization_name",
+          "refId": "A",
+          "timeField": "day"
+        }
+      ],
+      "title": "Copilot Interactions",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "elasticsearch-user-metrics"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "yellow",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 1
+      },
+      "id": 205,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": ["sum"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "alias": "LOC Added",
+          "bucketAggs": [
+            {
+              "field": "day",
+              "id": "2",
+              "settings": {
+                "interval": "auto",
+                "min_doc_count": "0",
+                "timeZone": "utc"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "elasticsearch-user-metrics"
+          },
+          "metrics": [
+            {
+              "field": "loc_added_sum",
+              "id": "1",
+              "type": "sum"
+            }
+          ],
+          "query": "organization_slug: $organization_name",
+          "refId": "A",
+          "timeField": "day"
+        }
+      ],
+      "title": "LOC Added (Copilot)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "elasticsearch-user-metrics"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 30
+              },
+              {
+                "color": "green",
+                "value": 50
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 1
+      },
+      "id": 206,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": ["mean"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "day",
+              "id": "4",
+              "settings": {
+                "interval": "auto",
+                "min_doc_count": "0",
+                "timeZone": "utc"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "elasticsearch-user-metrics"
+          },
+          "metrics": [
+            {
+              "field": "code_acceptance_activity_count",
+              "hide": true,
+              "id": "1",
+              "type": "sum"
+            },
+            {
+              "field": "code_generation_activity_count",
+              "hide": true,
+              "id": "2",
+              "type": "sum"
+            },
+            {
+              "field": "",
+              "id": "3",
+              "pipelineAgg": "1",
+              "pipelineVariables": [
+                {
+                  "name": "accepted",
+                  "pipelineAgg": "1"
+                },
+                {
+                  "name": "generated",
+                  "pipelineAgg": "2"
+                }
+              ],
+              "settings": {
+                "script": "params.generated > 0 ? params.accepted / params.generated : 0"
+              },
+              "type": "bucket_script"
+            }
+          ],
+          "query": "organization_slug: $organization_name",
+          "refId": "A",
+          "timeField": "day"
+        }
+      ],
+      "title": "Acceptance Rate",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      },
+      "id": 110,
+      "panels": [],
+      "title": "📈 Productivity Trends",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "hue",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Copilot Interactions"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Commits"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "PRs Opened"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 16,
+        "x": 0,
+        "y": 6
+      },
+      "id": 111,
+      "options": {
+        "legend": {
+          "calcs": ["sum", "mean"],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "alias": "Commits",
+          "bucketAggs": [
+            {
+              "field": "day",
+              "id": "2",
+              "settings": {
+                "interval": "1d",
+                "min_doc_count": "0",
+                "timeZone": "utc"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "elasticsearch-developer-activity"
+          },
+          "metrics": [
+            {
+              "field": "commit_count",
+              "id": "1",
+              "type": "sum"
+            }
+          ],
+          "query": "organization_slug: $organization_name",
+          "refId": "Commits",
+          "timeField": "day"
+        },
+        {
+          "alias": "PRs Opened",
+          "bucketAggs": [
+            {
+              "field": "day",
+              "id": "2",
+              "settings": {
+                "interval": "1d",
+                "min_doc_count": "0",
+                "timeZone": "utc"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "elasticsearch-developer-activity"
+          },
+          "metrics": [
+            {
+              "field": "prs_opened",
+              "id": "1",
+              "type": "sum"
+            }
+          ],
+          "query": "organization_slug: $organization_name",
+          "refId": "PRs",
+          "timeField": "day"
+        },
+        {
+          "alias": "Copilot Interactions",
+          "bucketAggs": [
+            {
+              "field": "day",
+              "id": "2",
+              "settings": {
+                "interval": "1d",
+                "min_doc_count": "0",
+                "timeZone": "utc"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "elasticsearch-user-metrics"
+          },
+          "metrics": [
+            {
+              "field": "user_initiated_interaction_count",
+              "id": "1",
+              "type": "sum"
+            }
+          ],
+          "query": "organization_slug: $organization_name",
+          "refId": "Copilot",
+          "timeField": "day"
+        }
+      ],
+      "title": "Developer Activity & Copilot Usage Over Time",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "elasticsearch-user-metrics"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Acceptance Rate",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "area"
+            }
+          },
+          "mappings": [],
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 0.3
+              },
+              {
+                "color": "green",
+                "value": 0.5
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 16,
+        "y": 6
+      },
+      "id": 112,
+      "options": {
+        "legend": {
+          "calcs": ["mean", "last"],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "alias": "Accepted",
+          "bucketAggs": [
+            {
+              "field": "day",
+              "id": "2",
+              "settings": {
+                "interval": "1d",
+                "min_doc_count": "1",
+                "timeZone": "utc"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "elasticsearch-user-metrics"
+          },
+          "metrics": [
+            {
+              "field": "code_acceptance_activity_count",
+              "id": "1",
+              "type": "sum"
+            }
+          ],
+          "query": "organization_slug: $organization_name",
+          "refId": "A",
+          "timeField": "day"
+        },
+        {
+          "alias": "Generated",
+          "bucketAggs": [
+            {
+              "field": "day",
+              "id": "2",
+              "settings": {
+                "interval": "1d",
+                "min_doc_count": "1",
+                "timeZone": "utc"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "elasticsearch-user-metrics"
+          },
+          "metrics": [
+            {
+              "field": "code_generation_activity_count",
+              "id": "1",
+              "type": "sum"
+            }
+          ],
+          "query": "organization_slug: $organization_name",
+          "refId": "B",
+          "timeField": "day"
+        }
+      ],
+      "title": "Copilot Acceptance Rate Trend",
+      "transformations": [
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "Time",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Acceptance Rate",
+            "binary": {
+              "left": "Accepted",
+              "operator": "/",
+              "right": "Generated"
+            },
+            "mode": "binary"
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": ["Time", "Acceptance Rate"]
+            }
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "id": 120,
+      "panels": [],
+      "title": "👥 Team Analysis",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "elasticsearch-developer-activity"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "bars",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 17
+      },
+      "id": 121,
+      "options": {
+        "legend": {
+          "calcs": ["sum"],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "alias": "{{term team}}",
+          "bucketAggs": [
+            {
+              "field": "team",
+              "id": "3",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "_term",
+                "size": "10"
+              },
+              "type": "terms"
+            },
+            {
+              "field": "day",
+              "id": "2",
+              "settings": {
+                "interval": "1w",
+                "min_doc_count": "0",
+                "timeZone": "utc"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "elasticsearch-developer-activity"
+          },
+          "metrics": [
+            {
+              "field": "commit_count",
+              "id": "1",
+              "type": "sum"
+            }
+          ],
+          "query": "organization_slug: $organization_name",
+          "refId": "A",
+          "timeField": "day"
+        }
+      ],
+      "title": "Commits by Team (Weekly)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "elasticsearch-developer-activity"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 12,
+        "y": 17
+      },
+      "id": 122,
+      "options": {
+        "displayLabels": ["percent"],
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "values": ["value"]
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": ["sum"],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "alias": "{{term team}}",
+          "bucketAggs": [
+            {
+              "field": "team",
+              "id": "2",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "1",
+                "size": "10"
+              },
+              "type": "terms"
+            },
+            {
+              "field": "day",
+              "id": "3",
+              "settings": {
+                "interval": "auto",
+                "min_doc_count": "0",
+                "timeZone": "utc"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "elasticsearch-developer-activity"
+          },
+          "metrics": [
+            {
+              "field": "total_contributions",
+              "id": "1",
+              "type": "sum"
+            }
+          ],
+          "query": "organization_slug: $organization_name",
+          "refId": "A",
+          "timeField": "day"
+        }
+      ],
+      "title": "Contributions by Team",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "elasticsearch-developer-activity"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 18,
+        "y": 17
+      },
+      "id": 123,
+      "options": {
+        "displayLabels": ["percent"],
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "values": ["value"]
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": ["sum"],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "alias": "{{term seniority}}",
+          "bucketAggs": [
+            {
+              "field": "seniority",
+              "id": "2",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "1",
+                "size": "10"
+              },
+              "type": "terms"
+            },
+            {
+              "field": "day",
+              "id": "3",
+              "settings": {
+                "interval": "auto",
+                "min_doc_count": "0",
+                "timeZone": "utc"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "elasticsearch-developer-activity"
+          },
+          "metrics": [
+            {
+              "field": "total_contributions",
+              "id": "1",
+              "type": "sum"
+            }
+          ],
+          "query": "organization_slug: $organization_name",
+          "refId": "A",
+          "timeField": "day"
+        }
+      ],
+      "title": "Contributions by Seniority",
+      "type": "piechart"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 26
+      },
+      "id": 130,
+      "panels": [],
+      "title": "🏆 Leaderboards",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "elasticsearch-developer-activity"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "bars",
+            "fillOpacity": 80,
+            "gradientMode": "hue",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Commits"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 27
+      },
+      "id": 131,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "alias": "Commits",
+          "bucketAggs": [
+            {
+              "field": "user_login",
+              "id": "2",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "1",
+                "size": "15"
+              },
+              "type": "terms"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "elasticsearch-developer-activity"
+          },
+          "metrics": [
+            {
+              "field": "commit_count",
+              "id": "1",
+              "type": "sum"
+            }
+          ],
+          "query": "organization_slug: $organization_name",
+          "refId": "A",
+          "timeField": "day"
+        }
+      ],
+      "title": "Top Contributors by Commits",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "elasticsearch-user-metrics"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "bars",
+            "fillOpacity": 80,
+            "gradientMode": "hue",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Copilot Interactions"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 27
+      },
+      "id": 132,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "alias": "Copilot Interactions",
+          "bucketAggs": [
+            {
+              "field": "user_login",
+              "id": "2",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "1",
+                "size": "15"
+              },
+              "type": "terms"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "elasticsearch-user-metrics"
+          },
+          "metrics": [
+            {
+              "field": "user_initiated_interaction_count",
+              "id": "1",
+              "type": "sum"
+            }
+          ],
+          "query": "organization_slug: $organization_name",
+          "refId": "A",
+          "timeField": "day"
+        }
+      ],
+      "title": "Top Copilot Users",
+      "type": "barchart"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 35
+      },
+      "id": 140,
+      "panels": [],
+      "title": "📋 Detailed Comparison",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "User"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Copilot Interactions"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "gauge"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Dev Contributions"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "gauge"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Commits"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "gauge"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Code Acceptance"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "gauge"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "LOC Added"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "gauge"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 24,
+        "x": 0,
+        "y": 36
+      },
+      "id": 141,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": ["sum"],
+          "show": true
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Copilot Interactions"
+          }
+        ]
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "user_login",
+              "id": "2",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "1",
+                "size": "50"
+              },
+              "type": "terms"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "elasticsearch-user-metrics"
+          },
+          "metrics": [
+            {
+              "field": "user_initiated_interaction_count",
+              "id": "1",
+              "settings": {},
+              "type": "sum"
+            },
+            {
+              "field": "code_acceptance_activity_count",
+              "id": "3",
+              "type": "sum"
+            },
+            {
+              "field": "loc_added_sum",
+              "id": "4",
+              "type": "sum"
+            }
+          ],
+          "query": "organization_slug: $organization_name",
+          "refId": "CopilotMetrics",
+          "timeField": "day"
+        },
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "user_login",
+              "id": "2",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "1",
+                "size": "50"
+              },
+              "type": "terms"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "elasticsearch-developer-activity"
+          },
+          "metrics": [
+            {
+              "field": "total_contributions",
+              "id": "1",
+              "type": "sum"
+            },
+            {
+              "field": "commit_count",
+              "id": "3",
+              "type": "sum"
+            },
+            {
+              "field": "prs_opened",
+              "id": "4",
+              "type": "sum"
+            },
+            {
+              "field": "prs_reviewed",
+              "id": "5",
+              "type": "sum"
+            }
+          ],
+          "query": "organization_slug: $organization_name",
+          "refId": "DevActivity",
+          "timeField": "day"
+        }
+      ],
+      "title": "User Comparison: Copilot Usage vs Developer Activity",
+      "transformations": [
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "user_login",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "Sum code_acceptance_activity_count": "Code Acceptance",
+              "Sum commit_count": "Commits",
+              "Sum loc_added_sum": "LOC Added",
+              "Sum prs_opened": "PRs Opened",
+              "Sum prs_reviewed": "PRs Reviewed",
+              "Sum total_contributions": "Dev Contributions",
+              "Sum user_initiated_interaction_count": "Copilot Interactions",
+              "user_login": "User"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 39,
+  "tags": ["copilot", "developer-activity", "comparison", "productivity"],
+  "templating": {
+    "list": [
+      {
+        "current": {},
+        "datasource": {
+          "type": "elasticsearch",
+          "uid": "elasticsearch-developer-activity"
+        },
+        "definition": "{\"find\":\"terms\",\"field\":\"organization_slug\"}",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Organization",
+        "multi": true,
+        "name": "organization_name",
+        "options": [],
+        "query": "{\"find\":\"terms\",\"field\":\"organization_slug\"}",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {},
+        "datasource": {
+          "type": "elasticsearch",
+          "uid": "elasticsearch-developer-activity"
+        },
+        "definition": "{\"find\":\"terms\",\"field\":\"team\"}",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Team",
+        "multi": true,
+        "name": "team",
+        "options": [],
+        "query": "{\"find\":\"terms\",\"field\":\"team\"}",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {},
+        "datasource": {
+          "type": "elasticsearch",
+          "uid": "elasticsearch-developer-activity"
+        },
+        "definition": "{\"find\":\"terms\",\"field\":\"seniority\"}",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Seniority",
+        "multi": true,
+        "name": "seniority",
+        "options": [],
+        "query": "{\"find\":\"terms\",\"field\":\"seniority\"}",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-90d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Developer Activity vs Copilot Usage",
+  "uid": "developer-activity-comparison",
+  "version": 1,
+  "weekStart": ""
+}

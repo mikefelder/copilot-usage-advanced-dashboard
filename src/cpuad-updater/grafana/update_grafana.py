@@ -328,6 +328,10 @@ def add_grafana_data_sources(grafana_token, max_retries=3, retry_interval=5):
             "name": "elasticsearch-user-adoption",
             "index": "copilot_user_adoption",
         },
+        {
+            "name": "elasticsearch-developer-activity",
+            "index": os.getenv("INDEX_DEVELOPER_ACTIVITY", "developer_activity"),
+        },
     ]
 
     # Template for the payload
@@ -341,8 +345,12 @@ def add_grafana_data_sources(grafana_token, max_retries=3, retry_interval=5):
         else:
             time_field = "day"
         
+        # Use the data source name as a stable UID for easier dashboard provisioning
+        stable_uid = name
+        
         return {
             "name": name,
+            "uid": stable_uid,
             "type": "elasticsearch",
             "access": "proxy",
             "url": f"{elasticsearch_url.rstrip('/')}",
@@ -372,7 +380,7 @@ def add_grafana_data_sources(grafana_token, max_retries=3, retry_interval=5):
         if check_resp.status_code == 200:
             ds_details = check_resp.json()
             payload["id"] = ds_details["id"]
-            payload["uid"] = ds_details["uid"]
+            # Keep our stable UID, don't use the existing random one
             logging.info(f"Updating data source: {ds['name']}...")
             safe_request(
                 "PUT",
@@ -418,6 +426,7 @@ def generate_grafana_model(grafana_token):
         "elasticsearch-user-metrics-top-by-day",
         "elasticsearch-user-metrics-summary",
         "elasticsearch-user-adoption",
+        "elasticsearch-developer-activity",
     ]
 
 

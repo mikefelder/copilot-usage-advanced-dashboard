@@ -20,6 +20,7 @@
 |1.6| refactor timezone handling in main.py & Docker run ENV paras |20250410|
 |1.7| [Add Elasticsearch authentication](https://github.com/satomic/copilot-usage-advanced-dashboard/pull/19) |20250411|
 |1.8| **User Metrics Analytics Module**: Added 5th data source with user adoption leaderboard, Top 10 visualization, hourly automation, and production-ready deployment |20251120|
+|1.9| **Developer Activity Comparison**: Added developer activity metrics (commits, PRs, code reviews, issues) to compare alongside Copilot usage for productivity analysis |20260129|
 
 ## Table of contents
 
@@ -107,6 +108,9 @@ docker-compose up -d
 | `EXECUTION_INTERVAL_HOURS` | No | Data fetch frequency (hours) | `1` |
 | `INDEX_USER_METRICS` | No | User metrics index name | `copilot_user_metrics` |
 | `INDEX_USER_ADOPTION` | No | Adoption leaderboard index | `copilot_user_adoption` |
+| `INDEX_DEVELOPER_ACTIVITY` | No | Developer activity metrics index | `developer_activity` |
+| `ENABLE_DEVELOPER_ACTIVITY` | No | Enable developer activity collection | `true` |
+| `DEVELOPER_ACTIVITY_DAYS_BACK` | No | Days of history for developer activity | `28` |
 
 ---
 
@@ -119,6 +123,7 @@ docker-compose up -d
 - [Get Copilot seat information and settings for an organization](https://docs.github.com/en/enterprise-cloud@latest/rest/copilot/copilot-user-management?apiVersion=2022-11-28#get-copilot-seat-information-and-settings-for-an-organization)
 - [List all Copilot seat assignments for an organization](https://docs.github.com/en/enterprise-cloud@latest/rest/copilot/copilot-user-management?apiVersion=2022-11-28#list-all-copilot-seat-assignments-for-an-organization)
 - [**NEW in v1.8** - Get Copilot User Metrics (28-day rolling window)](https://docs.github.com/en/enterprise-cloud@latest/rest/copilot/copilot-usage?apiVersion=2022-11-28#get-a-summary-of-copilot-user-metrics)
+- [**NEW in v1.9** - Developer Activity Metrics (commits, PRs, reviews)](https://docs.github.com/en/rest/search/search?apiVersion=2022-11-28) - For comparing developer productivity with Copilot usage
 
 representing Copilot usage in multi organizations & teams from different dimensions. The features are summarized as follows:
 - Data is persisted in Elasticsearch and visualized in Grafana, **not just the past 28 days**. So you can freely choose the time period you want to visualize, such as the past year or a specific month.

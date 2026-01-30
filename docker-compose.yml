@@ -76,6 +76,9 @@ services:
       ELASTICSEARCH_URL: http://elasticsearch:9200
       INDEX_USER_METRICS: copilot_user_metrics
       INDEX_USER_ADOPTION: copilot_user_adoption
+      INDEX_DEVELOPER_ACTIVITY: developer_activity
+      ENABLE_DEVELOPER_ACTIVITY: ${ENABLE_DEVELOPER_ACTIVITY:-true}
+      DEVELOPER_ACTIVITY_DAYS_BACK: ${DEVELOPER_ACTIVITY_DAYS_BACK:-28}
       EXECUTION_INTERVAL_HOURS: ${EXECUTION_INTERVAL_HOURS:-1}
       # Add other environment variables as needed
     restart: unless-stopped
