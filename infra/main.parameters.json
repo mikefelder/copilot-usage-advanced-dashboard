@@ -56,7 +56,7 @@
           },
           {
             "name": "GRAFANA_URL",
-            "value": "http://grafana:3000"
+            "value": "http://grafana:80"
           }
         ]
       }
