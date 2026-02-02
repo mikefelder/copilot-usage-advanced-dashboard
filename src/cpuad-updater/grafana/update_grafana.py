@@ -661,6 +661,7 @@ if __name__ == "__main__":
     # Try to import dashboards from provisioning directory
     # This handles both local (docker-compose) and deployed scenarios
     dashboard_sources = [
+        "/app/grafana-provisioning/dashboards",  # Where they're copied in the container image
         "/var/lib/grafana/dashboards",  # Where Grafana mounts them in Azure
         "grafana-provisioning/dashboards",  # Relative path from working directory
         "../../../grafana-provisioning/dashboards",  # Relative path in container

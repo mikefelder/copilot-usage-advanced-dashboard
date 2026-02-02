@@ -24,6 +24,10 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 # Copy the grafana update script and related files to the working directory
 COPY . /app/
 
+# Copy provisioning dashboards (build context is project root)
+# This makes dashboards available for import during job execution
+COPY grafana-provisioning/dashboards /app/grafana-provisioning/dashboards/ || true
+
 # Create a non-root user and group
 RUN groupadd -g 1000 cpuadupdater && \
     useradd -u 1000 -g cpuadupdater -s /bin/bash -m cpuadupdater
