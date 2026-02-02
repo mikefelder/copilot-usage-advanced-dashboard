@@ -21,8 +21,12 @@ COPY requirements.txt /app/
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-# Copy mapping folder to the working directory
+# Copy the grafana update script and related files to the working directory
 COPY . /app/
+
+# Copy provisioning dashboards (from repo root relative to build context)
+# Build context should be the project root
+COPY grafana-provisioning/dashboards /app/grafana-provisioning/dashboards/
 
 # Create a non-root user and group
 RUN groupadd -g 1000 cpuadupdater && \

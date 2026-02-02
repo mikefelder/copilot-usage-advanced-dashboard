@@ -530,6 +530,71 @@ def generate_grafana_model(grafana_token):
         raise ValueError("Failed to load template content as JSON")
 
 
+def import_static_dashboards(dashboards_dir, grafana_token):
+    """
+    Imports all dashboard JSON files from a directory.
+    
+    Args:
+        dashboards_dir: Path to directory containing dashboard JSON files
+        grafana_token: Grafana API token for authentication
+    """
+    import pathlib
+    
+    if not os.path.exists(dashboards_dir):
+        logging.warning(f"Dashboards directory not found: {dashboards_dir}")
+        return
+    
+    dashboard_files = list(pathlib.Path(dashboards_dir).glob("*.json"))
+    
+    if not dashboard_files:
+        logging.warning(f"No dashboard JSON files found in {dashboards_dir}")
+        return
+    
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {grafana_token}",
+    }
+    
+    for dashboard_file in dashboard_files:
+        try:
+            with open(dashboard_file, 'r') as f:
+                dashboard_content = f.read()
+            
+            dashboard_obj = json.loads(dashboard_content)
+            
+            # Handle export format with "dashboard" key
+            if "dashboard" in dashboard_obj:
+                api_payload = {
+                    "dashboard": dashboard_obj["dashboard"],
+                    "folderId": 0,
+                    "overwrite": True,
+                    "message": f"Dashboard imported from {dashboard_file.name}"
+                }
+            else:
+                # Handle direct dashboard format
+                api_payload = {
+                    "dashboard": dashboard_obj,
+                    "folderId": 0,
+                    "overwrite": True,
+                    "message": f"Dashboard imported from {dashboard_file.name}"
+                }
+            
+            response = requests.post(
+                f"{grafana_url.rstrip('/')}/api/dashboards/db",
+                headers=headers,
+                json=api_payload,
+            )
+            
+            if response.status_code == 200:
+                logging.info(f"Successfully imported dashboard: {dashboard_file.name}")
+            else:
+                logging.error(f"Failed to import dashboard {dashboard_file.name}: {response.status_code} - {response.text}")
+        
+        except Exception as e:
+            logging.error(f"Error importing dashboard {dashboard_file.name}: {e}")
+
+
 if __name__ == "__main__":
 
     poll_for_grafana()
@@ -563,3 +628,22 @@ if __name__ == "__main__":
     )
 
     logging.info("Successfully imported Grafana dashboard.")
+    
+    logging.info("Importing static dashboards from provisioning directory...")
+    
+    # Try to import dashboards from provisioning directory
+    # This handles both local (docker-compose) and deployed scenarios
+    dashboard_sources = [
+        "/app/grafana-provisioning/dashboards",  # Where they're copied in the container
+        "/var/lib/grafana/dashboards",  # Where Grafana mounts them
+        "grafana-provisioning/dashboards",  # Relative path
+        "../../../grafana-provisioning/dashboards",  # Alternative relative path
+    ]
+    
+    for dashboard_dir in dashboard_sources:
+        if os.path.exists(dashboard_dir):
+            logging.info(f"Found dashboards directory: {dashboard_dir}")
+            import_static_dashboards(dashboard_dir, grafana_token)
+            break
+    else:
+        logging.warning("No static dashboards directory found in expected locations")
