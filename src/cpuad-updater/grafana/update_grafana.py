@@ -212,6 +212,32 @@ def create_grafana_access_token(headers, service_account_id):
     return grafana_api_token
 
 
+def get_grafana_headers(grafana_token=None):
+    """
+    Get headers for Grafana API calls, using either token or basic auth.
+    
+    Args:
+        grafana_token: API token if available, otherwise uses basic auth
+    
+    Returns:
+        Dictionary of headers for API requests
+    """
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+    }
+    
+    if grafana_token:
+        headers["Authorization"] = f"Bearer {grafana_token}"
+    else:
+        # Use basic auth as fallback
+        credentials = f"{grafana_username}:{grafana_password}"
+        encoded_credentials = base64.b64encode(credentials.encode("utf-8")).decode("utf-8")
+        headers["Authorization"] = f"Basic {encoded_credentials}"
+    
+    return headers
+
+
 def get_grafana_basic_credentials_headers():
     credentials = f"{grafana_username}:{grafana_password}"
     encoded_credentials = base64.b64encode(credentials.encode("utf-8")).decode("utf-8")
@@ -257,11 +283,7 @@ def import_grafana_dashboard(dashboard_model, grafana_token):
     """
     template_content = dashboard_model
 
-    headers = {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {grafana_token}",
-    }
+    headers = get_grafana_headers(grafana_token)
 
     # write the template content to a file
     with open("dashboard-template-test.json", "w") as f:
@@ -285,10 +307,7 @@ def import_grafana_dashboard(dashboard_model, grafana_token):
 
 
 def add_grafana_data_sources(grafana_token, max_retries=3, retry_interval=5):
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {grafana_token}",
-    }
+    headers = get_grafana_headers(grafana_token)
 
     # Data sources to add
     data_sources = [
@@ -550,11 +569,7 @@ def import_static_dashboards(dashboards_dir, grafana_token):
         logging.info(f"No dashboard JSON files found in {dashboards_dir}")
         return False
     
-    headers = {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {grafana_token}",
-    }
+    headers = get_grafana_headers(grafana_token)
     
     imported_count = 0
     for dashboard_file in dashboard_files:
@@ -608,8 +623,16 @@ if __name__ == "__main__":
         logging.info("Using provided Grafana API token from environment.")
         grafana_token = grafana_api_token_env
     else:
-        logging.info("No Grafana API token provided; creating a service account.")
-        grafana_token = setup_grafana_service_account()
+        logging.info("No Grafana API token provided; attempting to use basic auth credentials.")
+        try:
+            # Try to create a service account for better security
+            grafana_token = setup_grafana_service_account()
+            logging.info("Successfully created Grafana service account and token.")
+        except Exception as e:
+            logging.warning(f"Failed to create service account: {e}")
+            logging.info("Falling back to basic auth for API calls.")
+            # Fallback: we'll use basic auth headers directly in API calls
+            grafana_token = None
 
     logging.info("Adding Grafana data sources...")
 
