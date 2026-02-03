@@ -5,3 +5,4 @@ curl -X PUT "$ELASTICSEARCH_URL/copilot_seat_info_settings" -H 'Content-Type: ap
 curl -X PUT "$ELASTICSEARCH_URL/copilot_seat_assignments" -H 'Content-Type: application/json' -d @mapping/copilot_seat_assignments_mapping.json
 curl -X PUT "$ELASTICSEARCH_URL/copilot_user_adoption" -H 'Content-Type: application/json' -d @mapping/copilot_user_adoption_mapping.json
 curl -X PUT "$ELASTICSEARCH_URL/copilot_user_metrics" -H 'Content-Type: application/json' -d @mapping/copilot_user_metrics_mapping.json
+curl -X PUT "$ELASTICSEARCH_URL/developer_activity" -H 'Content-Type: application/json' -d @mapping/developer_activity_mapping.json

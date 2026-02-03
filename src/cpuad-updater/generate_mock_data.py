@@ -509,6 +509,38 @@ def load_to_elasticsearch(copilot_metrics, developer_activity):
     
     headers = {"Content-Type": "application/json"}
     
+    # Delete and recreate indexes with proper mappings
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    def ensure_index_with_mapping(index_name, mapping_file):
+        """Delete index if exists and create with proper mapping."""
+        mapping_path = os.path.join(script_dir, "mapping", mapping_file)
+        
+        # Delete existing index
+        delete_response = requests.delete(f"{ELASTICSEARCH_URL}/{index_name}")
+        if delete_response.status_code == 200:
+            print(f"  Deleted existing index: {index_name}")
+        
+        # Create with mapping
+        if os.path.exists(mapping_path):
+            with open(mapping_path, 'r') as f:
+                mapping = f.read()
+            create_response = requests.put(
+                f"{ELASTICSEARCH_URL}/{index_name}",
+                headers=headers,
+                data=mapping
+            )
+            if create_response.status_code in [200, 201]:
+                print(f"  Created index with mapping: {index_name}")
+            else:
+                print(f"  Warning: Could not create index {index_name}: {create_response.text[:100]}")
+        else:
+            print(f"  Warning: Mapping file not found: {mapping_path}")
+    
+    print("\nSetting up indexes with proper mappings...")
+    ensure_index_with_mapping(INDEX_USER_METRICS, "copilot_user_metrics_mapping.json")
+    ensure_index_with_mapping(INDEX_DEVELOPER_ACTIVITY, "developer_activity_mapping.json")
+    
     def bulk_index(index_name, records, batch_size=500):
         """Bulk index records using the _bulk API."""
         total = len(records)
