@@ -1087,7 +1087,7 @@
           "alias": "{{term team}}",
           "bucketAggs": [
             {
-              "field": "team",
+              "field": "team.keyword",
               "id": "3",
               "settings": {
                 "min_doc_count": "1",
@@ -1181,7 +1181,7 @@
           "alias": "{{term team}}",
           "bucketAggs": [
             {
-              "field": "team",
+              "field": "team.keyword",
               "id": "2",
               "settings": {
                 "min_doc_count": "1",
@@ -1275,7 +1275,7 @@
           "alias": "{{term seniority}}",
           "bucketAggs": [
             {
-              "field": "seniority",
+              "field": "seniority.keyword",
               "id": "2",
               "settings": {
                 "min_doc_count": "1",
@@ -1426,7 +1426,7 @@
           "alias": "Commits",
           "bucketAggs": [
             {
-              "field": "user_login",
+              "field": "user_login.keyword",
               "id": "2",
               "settings": {
                 "min_doc_count": "1",
@@ -1554,7 +1554,7 @@
           "alias": "Copilot Interactions",
           "bucketAggs": [
             {
-              "field": "user_login",
+              "field": "user_login.keyword",
               "id": "2",
               "settings": {
                 "min_doc_count": "1",
@@ -1772,7 +1772,7 @@
           "alias": "",
           "bucketAggs": [
             {
-              "field": "user_login",
+              "field": "user_login.keyword",
               "id": "2",
               "settings": {
                 "min_doc_count": "1",
@@ -1813,7 +1813,7 @@
           "alias": "",
           "bucketAggs": [
             {
-              "field": "user_login",
+              "field": "user_login.keyword",
               "id": "2",
               "settings": {
                 "min_doc_count": "1",
@@ -1860,7 +1860,7 @@
         {
           "id": "joinByField",
           "options": {
-            "byField": "user_login",
+            "byField": "user_login.keyword",
             "mode": "outer"
           }
         },
