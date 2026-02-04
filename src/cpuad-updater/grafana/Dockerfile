@@ -17,15 +17,15 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy requirements.txt and install Python packages
-COPY src/cpuad-updater/grafana/requirements.txt /app/
+COPY ./src/cpuad-updater/grafana/requirements.txt /app/
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Copy the grafana update script and related files to the working directory
-COPY src/cpuad-updater/grafana/ /app/
+COPY ./src/cpuad-updater/grafana/ /app/
 
 # Copy provisioning dashboards for import during job execution
-COPY grafana-provisioning/dashboards /app/grafana-provisioning/dashboards/
+COPY ./grafana-provisioning/dashboards /app/grafana-provisioning/dashboards/
 
 # Create a non-root user and group
 RUN groupadd -g 1000 cpuadupdater && \
