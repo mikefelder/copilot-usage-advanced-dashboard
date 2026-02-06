@@ -503,6 +503,29 @@ module grafana './modules/container-app.bicep' = {
     keyVaultName: keyVault.outputs.AZURE_RESOURCE_KEY_VAULT_NAME
     authentication: authentication
     managedIdentityClientIdSecretName: managedIdentityClientIdSecretName
+    initContainersTemplate: [
+      {
+        name: 'init-grafana'
+        image: 'busybox:1.28'
+        resources: {
+          cpu: json('0.25')
+          memory: '0.5Gi'
+        }
+        command: [
+          '/bin/sh'
+        ]
+        args: [
+          '-c'
+          'chown -R 472:0 /var/lib/grafana && chmod -R 775 /var/lib/grafana'
+        ]
+        volumeMounts: [
+          {
+            mountPath: '/var/lib/grafana'
+            volumeName: storageAccount.outputs.AZURE_STORAGE_GRAFANA_FILE_SHARE_NAME
+          }
+        ]
+      }
+    ]
     // probes: [
     //   {
     //     type: 'Liveness'
