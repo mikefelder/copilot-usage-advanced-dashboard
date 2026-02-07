@@ -5,6 +5,9 @@ param resourceToken string
 param principalId string
 param doRoleAssignments bool
 
+@description('Type of the principal - User for human users, ServicePrincipal for apps/managed identities')
+param principalType string = 'User'
+
 
 // Container registry
 module containerRegistry 'br/public:avm/res/container-registry/registry:0.1.1' = {
@@ -17,7 +20,7 @@ module containerRegistry 'br/public:avm/res/container-registry/registry:0.1.1' =
     roleAssignments: doRoleAssignments ? [
       {
         principalId: principalId
-        principalType: 'ServicePrincipal'
+        principalType: principalType
         roleDefinitionIdOrName: 'AcrPull'
       }
     ] : []
