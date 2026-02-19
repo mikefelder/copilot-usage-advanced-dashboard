@@ -509,7 +509,7 @@ module grafana './modules/container-app.bicep' = {
         name: storageAccount.outputs.AZURE_STORAGE_GRAFANA_FILE_SHARE_NAME
         storageName: storageAccount.outputs.AZURE_STORAGE_GRAFANA_FILE_SHARE_NAME
         storageType: 'NfsAzureFile'
-        mountOptions: 'dir_mode=0777,file_mode=0777,uid=1000,gid=1000,mfsymlinks,nobrl,cache=none'
+        mountOptions: 'dir_mode=0777,file_mode=0777,uid=472,gid=0,mfsymlinks,nobrl,cache=none'
       }
     ]
     keyVaultName: keyVault.outputs.AZURE_RESOURCE_KEY_VAULT_NAME
